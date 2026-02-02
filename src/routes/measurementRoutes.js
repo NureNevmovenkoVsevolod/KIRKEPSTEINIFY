@@ -6,6 +6,28 @@ const { asyncHandler } = require('../middleware/errorHandler');
 const router = express.Router();
 
 /**
+ * GET /api/measurements
+ * Get API info about measurements endpoint
+ */
+router.get(
+  '/',
+  (req, res) => {
+    res.json({
+      message: 'Measurements API',
+      endpoints: {
+        'POST /api/measurements': 'Record a new measurement',
+        'GET /api/measurements/station/:stationId': 'Get measurements for a station',
+        'GET /api/measurements/station/:stationId/latest': 'Get latest measurement',
+        'GET /api/measurements/station/:stationId/stats': 'Get measurement statistics',
+      },
+      queryParameters: {
+        period: 'Time period (1h, 24h, 7d, 30d, 90d, 1y)'
+      }
+    });
+  }
+);
+
+/**
  * POST /api/measurements
  * Record a measurement
  */
