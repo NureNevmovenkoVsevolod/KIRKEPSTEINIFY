@@ -1,0 +1,145 @@
+{
+  "info": {
+    "name": "KirkEpsteinify API",
+    "description": "API collection for testing KirkEpsteinify backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/auth/register",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"username\": \"testuser\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/auth/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stations",
+      "item": [
+        {
+          "name": "Add Station",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/stations",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<USER_ID_FROM_REGISTER>\",\n  \"name\": \"Backyard Weather Station\",\n  \"location\": \"Kyiv, Ukraine\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Stations",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/api/stations?userId=<USER_ID_FROM_REGISTER>",
+            "header": []
+          }
+        },
+        {
+          "name": "Get Station by ID",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/api/stations/<STATION_ID>",
+            "header": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Measurements",
+      "item": [
+        {
+          "name": "Post Measurement",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:5000/api/measurements",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stationId\": \"<STATION_ID>\",\n  \"temperature\": 22.5,\n  \"humidity\": 65.0,\n  \"pressure\": 1013.25,\n  \"windSpeed\": 5.2,\n  \"rainfall\": 0.0,\n  \"lightLevel\": 750.0\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Measurements (24h)",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/api/stations/<STATION_ID>/measurements?period=24h",
+            "header": []
+          }
+        },
+        {
+          "name": "Get Measurements (7 days)",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/api/stations/<STATION_ID>/measurements?period=7d",
+            "header": []
+          }
+        },
+        {
+          "name": "Get Measurements (30 days)",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/api/stations/<STATION_ID>/measurements?period=30d",
+            "header": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:5000/health",
+            "header": []
+          }
+        }
+      ]
+    }
+  ]
+}
