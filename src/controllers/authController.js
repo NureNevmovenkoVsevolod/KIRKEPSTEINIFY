@@ -36,15 +36,21 @@ class AuthController {
       const { email, password } = req.body;
 
       // Authenticate user
-      const user = await authService.login(email, password);
+      const result = await authService.login(email, password);
 
-      if (!user) {
+      if (!result) {
         return res.status(401).json({ error: 'Invalid email or password' });
       }
 
       res.json({
         message: 'Login successful',
-        user,
+        token: result.token,
+        user: {
+          id: result.id,
+          email: result.email,
+          username: result.username,
+          role: result.role
+        },
       });
     } catch (error) {
       next(error);

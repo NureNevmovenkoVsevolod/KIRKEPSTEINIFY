@@ -1,20 +1,29 @@
 const authService = require('../services/authService');
 const auditService = require('../services/auditService');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key_change_in_production';
 
 /**
- * Extract user from request (placeholder - in real app would verify JWT token)
- * For demo purposes, checks X-User-ID header
+ * Extract user from request (JWT verification)
  */
 const extractUserFromRequest = async (req) => {
-  // In production, this would verify JWT token
-  // For now, we accept userId from header (for testing)
-  const userId = req.headers['x-user-id'];
+  // Try to get token from Authorization header
+  const authHeader = req.headers['authorization'];
   
-  if (!userId) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return null;
   }
 
-  return await authService.findById(userId);
+  const token = authHeader.substring(7); // Remove "Bearer " prefix
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return await authService.findById(decoded.id);
+  } catch (error) {
+    console.error('JWT verification error:', error.message);
+    return null;
+  }
 };
 
 /**
@@ -26,7 +35,7 @@ const authenticate = async (req, res, next) => {
     const user = await extractUserFromRequest(req);
 
     if (!user) {
-      return res.status(401).json({ error: 'Unauthorized: User not found or invalid token' });
+      return res.status(401).json({ error: 'Unauthorized: Invalid or missing token' });
     }
 
     req.user = user;

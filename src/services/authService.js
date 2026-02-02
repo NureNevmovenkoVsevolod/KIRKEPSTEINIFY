@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const pool = require('../db/pool');
 const config = require('../config/config');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key_change_in_production';
 
 class AuthService {
   /**
@@ -27,7 +30,7 @@ class AuthService {
    * Login a user
    * @param {string} email - User email
    * @param {string} password - User password
-   * @returns {Promise<Object>} User object with id, email, username, role
+   * @returns {Promise<Object>} User object with token
    */
   async login(email, password) {
     // Find user by email
@@ -48,9 +51,16 @@ class AuthService {
       return null; // Invalid password
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
     // Return user without password hash
     const { password_hash, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    return { ...userWithoutPassword, token };
   }
 
   /**

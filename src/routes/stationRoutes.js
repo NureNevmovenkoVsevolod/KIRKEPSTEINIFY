@@ -2,6 +2,7 @@ const express = require('express');
 const stationController = require('../controllers/stationController');
 const validators = require('../middleware/validation');
 const { asyncHandler } = require('../middleware/errorHandler');
+const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ const router = express.Router();
  */
 router.post(
   '/',
+  authenticate,
   validators.validateCreateStation,
   asyncHandler(stationController.createStation.bind(stationController))
 );
@@ -21,6 +23,7 @@ router.post(
  */
 router.get(
   '/',
+  authenticate,
   asyncHandler(stationController.getUserStations.bind(stationController))
 );
 
@@ -30,6 +33,7 @@ router.get(
  */
 router.get(
   '/:stationId',
+  authenticate,
   asyncHandler(stationController.getStationById.bind(stationController))
 );
 
@@ -39,6 +43,7 @@ router.get(
  */
 router.put(
   '/:stationId',
+  authenticate,
   asyncHandler(stationController.updateStation.bind(stationController))
 );
 
@@ -48,6 +53,7 @@ router.put(
  */
 router.delete(
   '/:stationId',
+  authenticate,
   asyncHandler(stationController.deleteStation.bind(stationController))
 );
 

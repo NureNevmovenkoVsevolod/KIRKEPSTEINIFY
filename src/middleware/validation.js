@@ -60,7 +60,8 @@ const validators = {
    * Validate station creation
    */
   validateCreateStation: (req, res, next) => {
-    const { userId, name } = req.body;
+    const { name } = req.body;
+    const userId = req.user?.id;
 
     if (!userId || !name) {
       return res.status(400).json({
@@ -73,6 +74,9 @@ const validators = {
         error: 'Station name must be between 2 and 100 characters',
       });
     }
+
+    // Add userId from auth to body for controller
+    req.body.userId = userId;
 
     next();
   },
