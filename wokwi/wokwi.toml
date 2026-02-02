@@ -1,0 +1,6 @@
+[wokwi]
+version = 1
+
+[env]
+WIFI_SSID = "Wokwi-GUEST"
+WIFI_PASSWORD = ""
